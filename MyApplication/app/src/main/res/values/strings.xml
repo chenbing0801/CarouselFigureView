@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">CarouselFigureView</string>
-    <string name="setViewPagerSwitchSpeedException"><![CDATA[CarouselFigureView:you set speed is so Slow, speedTime should > playIntervalTime::你设置的切换速度必须小于轮播图的切换时间]]></string>
-    <string name="startException">CarouselFigureView:you must set data use setURL() or setResourceList()::你必须设置数据 可以使用setUrl()或者setResourceList()来设置数据</string>
-    <string name="setData_Exception">your data size = 0:::你设置的数据为空</string>
-</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <com.my.view.CarouselFigureView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:mengyuan="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/carousel_figure_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        mengyuan:isAutoPlay="true"
+        mengyuan:isInfiniteLoop="true"
+        mengyuan:isNeedIndicationPoint="true"
+        mengyuan:playIntervalTime="3000"
+        mengyuan:pointBottomMargin="3dp"
+        mengyuan:pointLeft_Right_Margin="5dp"
+        mengyuan:pointBackground="@drawable/point_bg_test"
+        />
+
+
+
