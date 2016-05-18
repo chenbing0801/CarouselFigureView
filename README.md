@@ -1,13 +1,13 @@
-#一、简介
 
-    CarouselFigureView是一个支持自动切换、无限循环的轮播图控件。其主要作用就是实现项目当中的轮播图。
+##一、简介
+=========================================
 
+    **CarouselFigureView是一个支持自动切换、无限循环的轮播图控件。其主要作用就是实现项目当中的轮播图。
     CarouselFigureView有很强的适配性，可满足基本上所有的轮播图需求。
+    你可以在代码中随意禁用自动切换、无限循环功能，也可以隐藏指示点。**
 
-    你可以在代码中随意禁用自动切换、无限循环功能，也可以隐藏指示点。
-
-#二、版本
-
+##二、版本
+=========================================
     2016.5.17-v1.0.0
 
     
@@ -18,9 +18,10 @@
 
 
 
-#三、详解
-
-  ##1、属性：      
+##三、详解
+=========================================
+###1、属性
+--------------------------------
     isAutoPlay：              是否支持自动切换，boolean值
     
     isInfiniteLoop：          是否支持无限循环，boolean值  
@@ -38,15 +39,15 @@
                               并在其中给予state_selected＝true 以及state_selected＝false两种状态的背景，                 
                               稍后提供代码
                               
-  ##2、方法：  
-  
+##2、方法：  
+--------
     setURL(List<String> urlList)                
         设置数据，数据为url集合
         
     setResourceList(@DrawableRes List<Integer> resourceList)  
         设置数据，数据为resource文件
 
-    setViewPagerSwitchStyle(ViewPager.PageTransformer transformer)  
+    setViewPagerSwitchStyle(ViewPager.PageTransformer transformer) 
         自定义ViewPager的切换方式
         
     startLoad()     
@@ -59,10 +60,10 @@
     setCarouselFigureItemClickListener(CarouselFigureItemClickListener listener)
             条目的点击事件，包含view 以及 position两个参数。
             position的最大值等于数据长度－1,所以可以直接使用，不需要做取余等处理。
-  ##3、demo代码：
-
-    ###布局文件：            
-
+###3、demo代码：
+————————————————
+####布局文件：            
+```
     <?xml version="1.0" encoding="utf-8"?>
         <com.my.view.CarouselFigureView
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -78,10 +79,9 @@
             mengyuan:pointLeft_Right_Margin="5dp"
             mengyuan:pointBackground="@drawable/point_bg_test"
         />
-        
-        
-    ###activity：
-  
+```
+####activity：
+```
       @Override
       protected void onCreate(Bundle savedInstanceState) {
           super.onCreate(savedInstanceState);
@@ -99,12 +99,12 @@
           carouselFigureView.setViewPagerSwitchSpeed(500);
       }
       
+```      
       
-    ###最后，贴一下指示点背景，在res/drawable文件下
-
-    ###point_seclted.xml
-
-      <?xml version="1.0" encoding="utf-8"?>
+####最后，贴一下指示点背景，在res/drawable文件下
+####point_seclted.xml
+```
+<?xml version="1.0" encoding="utf-8"?>
       <shape xmlns:android="http://schemas.android.com/apk/res/android"
           android:shape="oval">
           <size
@@ -115,11 +115,11 @@
               android:width="1dp"
               android:color="@android:color/white" />
       </shape>
+```     
       
-      
-   ###point_unselected.xml
-
-      <?xml version="1.0" encoding="utf-8"?>
+####point_unselected.xml
+```
+    <?xml version="1.0" encoding="utf-8"?>
       <shape xmlns:android="http://schemas.android.com/apk/res/android"
           android:shape="oval">
           <size
@@ -129,14 +129,18 @@
           <stroke
               android:width="1dp"
               android:color="@android:color/white" />
-      </shape>
-      
-      
-   ###真正设置为指示点背景的文件：point_bg.xml
-
-      <?xml version="1.0" encoding="utf-8"?>
-      <selector xmlns:android="http://schemas.android.com/apk/res/android">
-          <item android:drawable="@drawable/point_unselect" android:state_selected="false"/>
-          <item android:drawable="@drawable/point_select" android:state_selected="true"/>
+    </shape>
+```
+ 
+####真正设置为指示点背景的文件：point_bg.xml
+```
+<?xml version="1.0" encoding="utf-8"?>
+     <selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/point_unselect" android:state_selected="false"/>
+    <item android:drawable="@drawable/point_select" android:state_selected="true"/>
       </selector>
+```
 
+>希望这个demo可以在大家实现轮播图的时候有帮助
+
+>有任何问题欢迎大家给我留言：**mengyuanzz@126.com**
