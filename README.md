@@ -1,4 +1,4 @@
-#一、CarouselFigureView简介
+#一、简介
 
     CarouselFigureView是一个支持自动切换、无限循环的轮播图控件。其主要作用就是实现项目当中的轮播图。
 
@@ -6,9 +6,9 @@
 
     你可以在代码中随意禁用自动切换、无限循环功能，也可以隐藏指示点。
 
-#二、CarouselFigureView版本
+#二、版本
 
-    2016.5.17-v1.0.0-
+    2016.5.17-v1.0.0
 
     
 
@@ -18,9 +18,9 @@
 
 
 
-#三、CarouselFigureView详解
+#三、详解
 
-  ##1、CarouselFigureView的属性：      
+  ##1、属性：      
     isAutoPlay：              是否支持自动切换，boolean值
     
     isInfiniteLoop：          是否支持无限循环，boolean值  
@@ -38,7 +38,7 @@
                               并在其中给予state_selected＝true 以及state_selected＝false两种状态的背景，                 
                               稍后提供代码
                               
-  ##2、CarouselFigureView的公共方法：  
+  ##2、方法：  
   
     setURL(List<String> urlList)                
         设置数据，数据为url集合
