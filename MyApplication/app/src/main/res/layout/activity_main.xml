@@ -8,7 +8,7 @@
         mengyuan:isAutoPlay="true"
         mengyuan:isInfiniteLoop="true"
         mengyuan:isNeedIndicationPoint="true"
-        mengyuan:playIntervalTime="4000"
+        mengyuan:playIntervalTime="3000"
         mengyuan:pointBottomMargin="3dp"
         mengyuan:pointLeft_Right_Margin="5dp"
         mengyuan:pointBackground="@drawable/point_bg_test"

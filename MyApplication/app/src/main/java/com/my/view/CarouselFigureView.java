@@ -8,6 +8,7 @@ import android.support.annotation.DrawableRes;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,13 +42,14 @@ public class CarouselFigureView extends RelativeLayout {
     private boolean isAutoPlay = true; //是否自动切换
     private boolean isInfiniteLoop = true; //是否无限循环
     private boolean isNeedIndicationPoint = true;//是否需要指示点
-    private float pointLeft_Right_Margin = 5;//指示点的间距，单位是dp
-    private float pointBottomMargin = 2;//指示点上移的距离,单位是dp
+    private float pointLeft_Right_Margin = 13;//指示点的间距，单位是px,在布局文件中设置单位最好为dp
+    private float pointBottomMargin = 5;//指示点上移的距离,单位是px，在布局文件中设置单位最好为dp
     private int playIntervalTime = 3000;//自动切换间隔，默认3秒，单位毫秒
     private int pointBackgroundId = R.drawable.point_bg;//指示点背景，可自定义
 
     //－－－－－－－－－数据－－－－－－－－－－－
     private int itemCount; //条目数量
+    private int minCount;// 因为ViewPager无限循环切换时,条目数量小于等于3会出现崩溃、显示空白等问题，所以当数量为3以下时，该变量用于将条目数量翻倍
     private int lastPosition;//上一个显示的条目下标
     private List<String> urlList;//url集合
     private List<Integer> resourceList;//资源集合
@@ -56,6 +58,7 @@ public class CarouselFigureView extends RelativeLayout {
     private boolean userIsTouchScreen = false; //用户是否触屏，当用户触屏时，应停止自动播放
     private int MAX_VALUE = Integer.MAX_VALUE; //最大值，用于无限循环
     private int SELCET_LOAD_MODE; //图片加载模式
+    private CarouselFigureItemClickListener listener;//条目点击事件
 
     /**
      * 图片的加载方式
@@ -141,6 +144,11 @@ public class CarouselFigureView extends RelativeLayout {
     }
 
 
+    /**
+     * 初始化ViewPager
+     *
+     * @param context
+     */
     private void initViewPager(Context context) {
         viewPager = new ViewPager(context);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -182,10 +190,15 @@ public class CarouselFigureView extends RelativeLayout {
      * @param urlList：图片的url地址
      */
     public void setURL(List<String> urlList) {
+        if (urlList == null || urlList.size() <= 0)
+            throw new RuntimeException(getContext().getString(R.string.setData_Exception));
         this.urlList = urlList;
         SELCET_LOAD_MODE = LOAD_MODE.URL;
-        itemCount = urlList.size();
+        minCount = itemCount = urlList.size();
+
+        parseData(urlList);
     }
+
 
     /**
      * set data
@@ -193,14 +206,44 @@ public class CarouselFigureView extends RelativeLayout {
      * @param resourceList 图片资源地址
      */
     public void setResourceList(@DrawableRes List<Integer> resourceList) {
+        if (resourceList == null || resourceList.size() <= 0)
+            throw new RuntimeException(getContext().getString(R.string.setData_Exception));
         this.resourceList = resourceList;
         SELCET_LOAD_MODE = LOAD_MODE.RESOURCE;
-        itemCount = resourceList.size();
+        minCount = itemCount = resourceList.size();
+        parseData(resourceList);
+    }
+
+    private void parseData(List listData) {
+        if (listData.size() == 1) {
+            isAutoPlay = false;
+            isInfiniteLoop = false;
+
+        } else if (isInfiniteLoop) {
+            if (listData.size() <= 3) {
+                minCount = itemCount * 2;
+                switch (SELCET_LOAD_MODE) {
+                    case LOAD_MODE.RESOURCE:
+                        this.resourceList.addAll(listData);
+                        break;
+                    case LOAD_MODE.URL:
+                        this.urlList.addAll(listData);
+                        break;
+                }
+            }
+        }
+
+
+    }
+
+    public void setCarouselFigureItemClickListener(CarouselFigureItemClickListener listener) {
+        this.listener = listener;
     }
 
     /**
      * 改变ViewPager的切换方式
-     * @param transformer   可自定义ViewPager.PageTransformer，此类代表ViewPager切换动画
+     *
+     * @param transformer 可自定义ViewPager.PageTransformer，此类代表ViewPager切换动画
      */
     public void setViewPagerSwitchStyle(ViewPager.PageTransformer transformer) {
         viewPager.setPageTransformer(true, transformer);
@@ -209,10 +252,12 @@ public class CarouselFigureView extends RelativeLayout {
 
     /**
      * 改变ViewPager的切换速度
+     *
      * @param switchSpeed 单位毫秒
      */
     public void setViewPagerSwitchSpeed(int switchSpeed) {
-        if(switchSpeed >= playIntervalTime) throw new RuntimeException("CarouselFigureView:you set speed is so Slow, speedTime should > playIntervalTime::你设置的切换速度必须小于轮播图的切换时间");
+        if (switchSpeed >= playIntervalTime)
+            throw new RuntimeException(getContext().getString(R.string.setViewPagerSwitchSpeedException));
 
         try {
             Field field = ViewPager.class.getDeclaredField("mScroller");
@@ -229,9 +274,10 @@ public class CarouselFigureView extends RelativeLayout {
     /**
      * 在设置完数据之后调用此方法进行显示
      */
-    public void startLoad()  {
+    public void startLoad() {
 
-        if (SELCET_LOAD_MODE == 0)  throw new RuntimeException("CarouselFigureView:you must set data use setURL() or setResourceList()::你必须设置数据 可以使用setUrl()或者setResourceList()来设置数据");
+        if (SELCET_LOAD_MODE == 0)
+            throw new RuntimeException(getContext().getString(R.string.startException));
         if (isNeedIndicationPoint) {
             addIndicationPoint();
         }
@@ -251,7 +297,7 @@ public class CarouselFigureView extends RelativeLayout {
     private void loadPictureToImageView() {
         pictureList = new ArrayList<>();
         ImageView imageView;
-        for (int i = 0; i < itemCount; i++) {
+        for (int i = 0; i < minCount; i++) {
             imageView = new ImageView(this.getContext());
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             switch (SELCET_LOAD_MODE) {
@@ -306,17 +352,42 @@ public class CarouselFigureView extends RelativeLayout {
         }
 
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            container.addView(pictureList.get(position % itemCount));
-            return pictureList.get(position % itemCount);
+        public Object instantiateItem(ViewGroup container, final int position) {
+            ImageView imageView;
+            if (itemCount < 4) {
+                imageView = pictureList.get(position % minCount);
+                Log.i("mengyuan", "itemCount<4:::" + position % minCount);
+            } else {
+                Log.i("mengyuan", "itemCount>=4:::" + position % itemCount);
+                imageView = pictureList.get(position % itemCount);
+            }
+
+            imageView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onClick(v, position % itemCount);
+                    }
+                }
+            });
+            container.addView(imageView);
+            return imageView;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView(pictureList.get(position % itemCount));
+            if (itemCount < 4) {
+                container.removeView(pictureList.get(position % minCount));
+            } else {
+                container.removeView(pictureList.get(position % itemCount));
+            }
+
         }
+    }
 
 
+    public interface CarouselFigureItemClickListener {
+        void onClick(View view, int position);
     }
 
     //------------------other----------------------------------
@@ -327,6 +398,7 @@ public class CarouselFigureView extends RelativeLayout {
                 .load(url)
                 .placeholder(R.mipmap.img_empty)
                 .crossFade()
+
                 .into(imageView);
     }
 
@@ -337,7 +409,6 @@ public class CarouselFigureView extends RelativeLayout {
                 .crossFade()
                 .into(imageView);
     }
-
 
 
 }
