@@ -1,2 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
+
+    <item
+        jar="/Users/My/Documents/MyCode/MyGit/CarouselFigureView/demo/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.2.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="3469cb457f10f74c28cbc05f069b6c894f6cbdd0">
+        <dex dex="/Users/My/Documents/MyCode/MyGit/CarouselFigureView/demo/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-animated-vector-drawable-23.2.1_2b1c4f9bf665d9585b7606bdd603265a320bb11c/classes.dex" />
+    </item>
+    <item
+        jar="/Users/My/Documents/MyCode/MyGit/CarouselFigureView/demo/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="e4d0cbb0b999604b349062f0214a0a228a7fd151">
+        <dex dex="/Users/My/Documents/MyCode/MyGit/CarouselFigureView/demo/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-appcompat-v7-23.2.1_530ca3e02167d6087b393eeb61b6b6d894d85e60/classes.dex" />
+    </item>
+    <item
+        jar="/Users/My/Documents/MyCode/MyGit/CarouselFigureView/demo/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.2.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="673d77a5bbddd766037f088e775df525c46407f0">
+        <dex dex="/Users/My/Documents/MyCode/MyGit/CarouselFigureView/demo/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-vector-drawable-23.2.1_6dec132391794df4c1ad1c8e811831b279d9d49c/classes.dex" />
+    </item>
+    <item
+        jar="/Users/My/Documents/MyCode/MyGit/CarouselFigureView/demo/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.1/jars/libs/internal_impl-23.2.1.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="607a3d0b8013b4ccbfeb0b7cb293351994e021fb">
+        <dex dex="/Users/My/Documents/MyCode/MyGit/CarouselFigureView/demo/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.2.1_e554b4936d7e4f6dc970bb43ba94b04f4e91f133/classes.dex" />
+    </item>
+    <item
+        jar="/Users/My/Documents/MyCode/MyGit/CarouselFigureView/demo/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="d9132223feffc4419a777f3ec65647053b4f817e">
+        <dex dex="/Users/My/Documents/MyCode/MyGit/CarouselFigureView/demo/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_da475fc714c81d68d4ae42da229dd5d62cde442b/classes.dex" />
+    </item>
+    <item
+        jar="/Users/My/Documents/MyCode/MyGit/CarouselFigureView/demo/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="3be474b1b21b31cf2fa93fe6bd641ae108d96452">
+        <dex dex="/Users/My/Documents/MyCode/MyGit/CarouselFigureView/demo/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-23.2.1_c8c07f6d2aec4572f98abab5c63775f09b392a45/classes.dex" />
+    </item>
+    <item
+        jar="/Users/My/Documents/MyCode/MyGit/CarouselFigureView/demo/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="dbf82a6d46a6ea5aa1096cb6f5c1ea942be813d2">
+        <dex dex="/Users/My/Documents/MyCode/MyGit/CarouselFigureView/demo/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_7e94fbbb42128ad7d5a7327351434d88e61a32e1/classes.dex" />
+    </item>
+    <item
+        jar="/Users/My/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.2.1/support-annotations-23.2.1.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="ccb693bc0774fcb637246f7360de25b4af7df318">
+        <dex dex="/Users/My/Documents/MyCode/MyGit/CarouselFigureView/demo/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-23.2.1_d1a3ac097674524a99a8d7c7a97ba3ada125d202/classes.dex" />
+    </item>
+    <item
+        jar="/Users/My/.gradle/caches/modules-2/files-2.1/com.github.bumptech.glide/glide/3.6.1/86b122e640af09b0723e1fa44083c354ba6d9089/glide-3.6.1.jar"
+        jumboMode="true"
+        revision="23.0.2"
+        sha1="86b122e640af09b0723e1fa44083c354ba6d9089">
+        <dex dex="/Users/My/Documents/MyCode/MyGit/CarouselFigureView/demo/build/intermediates/transforms/dex/debug/folders/1000/10/glide-3.6.1_f04bab6002a9e05015cf5653ea031ab2b0691f5a/classes.dex" />
+    </item>
+
+</items>
