@@ -37,9 +37,9 @@ public class MainActivity extends AppCompatActivity {
         resourceList.add(R.drawable.aaa);
         resourceList.add(R.mipmap.ic_launcher);
         resourceList.add(R.mipmap.img_empty);
-
-//        carouselFigureView.setURL(url);
-        carouselFigureView.setResourceList(resourceList);
+//
+        carouselFigureView.setURL(url);
+//        carouselFigureView.setResourceList(resourceList);
         carouselFigureView.startLoad();
         carouselFigureView.setViewPagerSwitchStyle(new DepthPageTransformer());
         carouselFigureView.setViewPagerSwitchSpeed(200);

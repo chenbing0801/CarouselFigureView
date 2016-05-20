@@ -50,16 +50,16 @@ public class CarouselFigureView extends RelativeLayout implements ViewPager.OnPa
 
     //－－－－－－－－－数据－－－－－－－－－－－
     private int itemCount; //条目数量
-    private int minCount;// 因为ViewPager无限循环切换时,条目数量小于等于3会出现崩溃、显示空白等问题，所以当数量为3以下时，该变量用于将条目数量翻倍
     private int lastPosition;//上一个显示的条目下标
     private List<String> urlList;//url集合
     private List<Integer> resourceList;//资源集合
     private List<ImageView> pictureList;//存放图片的ImageView
     //--------------其他－－－－－－－－－－－
-    private boolean userIsTouchScreen = false; //用户是否触屏，当用户触屏时，应停止自动播放
     private int MAX_VALUE = Integer.MAX_VALUE; //最大值，用于无限循环
+    private boolean isHaveHandler = true;//当用户点击轮播图时，用来取消handler队列
     private int SELCET_LOAD_MODE; //图片加载模式
     private CarouselFigureItemClickListener listener;//条目点击事件
+    private final int HANDLE_MSG = 7758;
 
     /**
      * 图片的加载方式
@@ -73,10 +73,8 @@ public class CarouselFigureView extends RelativeLayout implements ViewPager.OnPa
         @Override
         public void handleMessage(Message msg) {
             if (isAutoPlay) {
-                if (!userIsTouchScreen) {
-                    viewPager.setCurrentItem(lastPosition + 1);
-                }
-                handler.sendEmptyMessageDelayed(88, playIntervalTime);
+                viewPager.setCurrentItem(lastPosition + 1);
+                handler.sendEmptyMessageDelayed(HANDLE_MSG, playIntervalTime);
             }
         }
     };
@@ -170,9 +168,7 @@ public class CarouselFigureView extends RelativeLayout implements ViewPager.OnPa
             throw new RuntimeException(getContext().getString(R.string.setData_Exception));
         this.urlList = urlList;
         SELCET_LOAD_MODE = LOAD_MODE.URL;
-        minCount = itemCount = urlList.size();
-
-        parseData(urlList);
+        itemCount = urlList.size();
     }
 
 
@@ -186,31 +182,9 @@ public class CarouselFigureView extends RelativeLayout implements ViewPager.OnPa
             throw new RuntimeException(getContext().getString(R.string.setData_Exception));
         this.resourceList = resourceList;
         SELCET_LOAD_MODE = LOAD_MODE.RESOURCE;
-        minCount = itemCount = resourceList.size();
-        parseData(resourceList);
+        itemCount = resourceList.size();
     }
 
-    private void parseData(List listData) {
-        if (listData.size() == 1) {
-            isAutoPlay = false;
-            isInfiniteLoop = false;
-
-        } else if (isInfiniteLoop) {
-            if (listData.size() <= 3) {
-                minCount = itemCount * 2;
-                switch (SELCET_LOAD_MODE) {
-                    case LOAD_MODE.RESOURCE:
-                        this.resourceList.addAll(listData);
-                        break;
-                    case LOAD_MODE.URL:
-                        this.urlList.addAll(listData);
-                        break;
-                }
-            }
-        }
-
-
-    }
 
     public void setCarouselFigureItemClickListener(CarouselFigureItemClickListener listener) {
         this.listener = listener;
@@ -257,36 +231,13 @@ public class CarouselFigureView extends RelativeLayout implements ViewPager.OnPa
         if (isNeedIndicationPoint) {
             addIndicationPoint();
         }
-        loadPictureToImageView();
         viewPager.setAdapter(new MyViewPagerAdapter());
         if (isInfiniteLoop) {
             viewPager.setCurrentItem(MAX_VALUE / 2 - (MAX_VALUE / 2) % itemCount);
         }
         if (isAutoPlay) {
-            handler.sendEmptyMessageDelayed(88, playIntervalTime);
+            handler.sendEmptyMessageDelayed(HANDLE_MSG, playIntervalTime);
         }
-    }
-
-    /**
-     * 根据数据将图片加载至ImageView，并将ImageView保存至List集合中
-     */
-    private void loadPictureToImageView() {
-        pictureList = new ArrayList<>();
-        ImageView imageView;
-        for (int i = 0; i < minCount; i++) {
-            imageView = new ImageView(this.getContext());
-            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            switch (SELCET_LOAD_MODE) {
-                case LOAD_MODE.URL:
-                    loadImgByUrl(urlList.get(i), imageView);
-                    break;
-                case LOAD_MODE.RESOURCE:
-                    loadImgByResourceId(resourceList.get(i), imageView);
-                    break;
-            }
-            pictureList.add(imageView);
-        }
-
     }
 
 
@@ -329,13 +280,17 @@ public class CarouselFigureView extends RelativeLayout implements ViewPager.OnPa
 
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-            ImageView imageView;
-            if (itemCount < 4) {
-                imageView = pictureList.get(position % minCount);
-            } else {
-                imageView = pictureList.get(position % itemCount);
-            }
 
+            ImageView imageView = new ImageView(container.getContext());
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            switch (SELCET_LOAD_MODE) {
+                case LOAD_MODE.URL:
+                    loadImgByUrl(urlList.get(position % itemCount), imageView);
+                    break;
+                case LOAD_MODE.RESOURCE:
+                    loadImgByResourceId(resourceList.get(position % itemCount), imageView);
+                    break;
+            }
             imageView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -349,14 +304,10 @@ public class CarouselFigureView extends RelativeLayout implements ViewPager.OnPa
         }
 
 
-
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            if (itemCount < 4) {
-                container.removeView(pictureList.get(position % minCount));
-            } else {
-                container.removeView(pictureList.get(position % itemCount));
-            }
+            container.removeView((View) object);
+
 
         }
 
@@ -380,10 +331,19 @@ public class CarouselFigureView extends RelativeLayout implements ViewPager.OnPa
     public void onPageScrollStateChanged(int state) {
         switch (state) {
             case ViewPager.SCROLL_STATE_IDLE://空闲状态
-                userIsTouchScreen = false;
+                if (isAutoPlay) {
+                    if (!isHaveHandler) {
+                        isHaveHandler = true;
+                        handler.sendEmptyMessageDelayed(HANDLE_MSG, playIntervalTime);
+                    }
+                }
                 break;
             case ViewPager.SCROLL_STATE_DRAGGING://用户滑动状态
-                userIsTouchScreen = true;
+                if (isAutoPlay) {
+                    handler.removeMessages(HANDLE_MSG);
+                    isHaveHandler = false;
+                }
+
                 break;
         }
 
