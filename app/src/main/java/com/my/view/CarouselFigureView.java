@@ -32,7 +32,7 @@ import com.my.view.switchanimotion.ViewPagerScroller;
  * CREATE-TIME:  16/5/16/上午10:49
  * DESC:
  */
-public class CarouselFigureView extends RelativeLayout {
+public class CarouselFigureView extends RelativeLayout implements ViewPager.OnPageChangeListener {
 
     //----------－－－－-控件－－－－－－－－－－－
     private ViewPager viewPager;//ImageView容器
@@ -46,6 +46,7 @@ public class CarouselFigureView extends RelativeLayout {
     private float pointBottomMargin = 5;//指示点上移的距离,单位是px，在布局文件中设置单位最好为dp
     private int playIntervalTime = 3000;//自动切换间隔，默认3秒，单位毫秒
     private int pointBackgroundId = R.drawable.point_bg;//指示点背景，可自定义
+    private int imgPlaceholderResource = R.mipmap.img_empty;//图片加载出之前显示的图片，占位图
 
     //－－－－－－－－－数据－－－－－－－－－－－
     private int itemCount; //条目数量
@@ -121,6 +122,7 @@ public class CarouselFigureView extends RelativeLayout {
         pointBottomMargin = a.getDimension(R.styleable.CarouselFigureView_pointBottomMargin, 2);
         playIntervalTime = a.getInt(R.styleable.CarouselFigureView_playIntervalTime, 3000);
         pointBackgroundId = a.getResourceId(R.styleable.CarouselFigureView_pointBackground, R.drawable.point_bg);
+        imgPlaceholderResource = a.getResourceId(R.styleable.CarouselFigureView_imgPlaceholderResource, R.mipmap.img_empty);
         // 为了保持以后使用该属性一致性,返回一个绑定资源结束的信号给资源
         a.recycle();
     }
@@ -151,33 +153,7 @@ public class CarouselFigureView extends RelativeLayout {
      */
     private void initViewPager(Context context) {
         viewPager = new ViewPager(context);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if (isNeedIndicationPoint) {
-                    indicationPointLayout.getChildAt(lastPosition % itemCount).setSelected(false);
-                    indicationPointLayout.getChildAt(position % itemCount).setSelected(true);
-                }
-                lastPosition = position;
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                switch (state) {
-                    case ViewPager.SCROLL_STATE_IDLE://空闲状态
-                        userIsTouchScreen = false;
-                        break;
-                    case ViewPager.SCROLL_STATE_DRAGGING://用户滑动状态
-                        userIsTouchScreen = true;
-                        break;
-                }
-
-            }
-        });
+        viewPager.addOnPageChangeListener(this);
         RelativeLayout.LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         this.addView(viewPager, layoutParams);
@@ -356,9 +332,7 @@ public class CarouselFigureView extends RelativeLayout {
             ImageView imageView;
             if (itemCount < 4) {
                 imageView = pictureList.get(position % minCount);
-                Log.i("mengyuan", "itemCount<4:::" + position % minCount);
             } else {
-                Log.i("mengyuan", "itemCount>=4:::" + position % itemCount);
                 imageView = pictureList.get(position % itemCount);
             }
 
@@ -374,6 +348,8 @@ public class CarouselFigureView extends RelativeLayout {
             return imageView;
         }
 
+
+
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             if (itemCount < 4) {
@@ -383,8 +359,35 @@ public class CarouselFigureView extends RelativeLayout {
             }
 
         }
+
     }
 
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if (isNeedIndicationPoint) {
+            indicationPointLayout.getChildAt(lastPosition % itemCount).setSelected(false);
+            indicationPointLayout.getChildAt(position % itemCount).setSelected(true);
+        }
+        lastPosition = position;
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        switch (state) {
+            case ViewPager.SCROLL_STATE_IDLE://空闲状态
+                userIsTouchScreen = false;
+                break;
+            case ViewPager.SCROLL_STATE_DRAGGING://用户滑动状态
+                userIsTouchScreen = true;
+                break;
+        }
+
+    }
 
     public interface CarouselFigureItemClickListener {
         void onClick(View view, int position);
@@ -396,7 +399,7 @@ public class CarouselFigureView extends RelativeLayout {
     private void loadImgByUrl(String url, final ImageView imageView) {
         Glide.with(this.getContext())
                 .load(url)
-                .placeholder(R.mipmap.img_empty)
+                .placeholder(imgPlaceholderResource)
                 .crossFade()
 
                 .into(imageView);
@@ -405,7 +408,7 @@ public class CarouselFigureView extends RelativeLayout {
     private void loadImgByResourceId(@DrawableRes int resource, ImageView imageView) {
         Glide.with(this.getContext())
                 .load(resource)
-                .placeholder(R.mipmap.img_empty)
+                .placeholder(imgPlaceholderResource)
                 .crossFade()
                 .into(imageView);
     }

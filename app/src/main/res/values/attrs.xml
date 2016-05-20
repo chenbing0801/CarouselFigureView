@@ -8,6 +8,7 @@
         <attr name="pointBottomMargin" format="dimension" />
         <attr name="playIntervalTime" format="integer" />
         <attr name="pointBackground" format="reference" />
+        <attr name="imgPlaceholderResource" format="reference" />
 
     </declare-styleable>
 </resources>

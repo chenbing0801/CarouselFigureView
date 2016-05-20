@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import com.my.R;
 import com.my.view.CarouselFigureView;
 import com.my.view.switchanimotion.DepthPageTransformer;
 
@@ -39,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
         resourceList.add(R.mipmap.ic_launcher);
         resourceList.add(R.mipmap.img_empty);
 
-        carouselFigureView.setURL(url);
-//        carouselFigureView.setResourceList(resourceList);
+//        carouselFigureView.setURL(url);
+        carouselFigureView.setResourceList(resourceList);
         carouselFigureView.startLoad();
         carouselFigureView.setViewPagerSwitchStyle(new DepthPageTransformer());
         carouselFigureView.setViewPagerSwitchSpeed(200);
