@@ -62,7 +62,7 @@ public class CarouselFigureView extends RelativeLayout implements ViewPager.OnPa
     /**
      * 图片的加载方式
      */
-    public interface LOAD_MODE {
+    private interface LOAD_MODE {
         int URL = 1001, RESOURCE = 1002;
     }
 
@@ -91,10 +91,10 @@ public class CarouselFigureView extends RelativeLayout implements ViewPager.OnPa
 
         parseCustomAttributes(context, attrs);
 
-        initView(context, attrs, defStyleAttr);
+        initView(context);
     }
 
-    private void initView(Context context, AttributeSet attrs, int defStyleAttr) {
+    private void initView(Context context) {
 
 
         initViewPager(context);
@@ -347,6 +347,9 @@ public class CarouselFigureView extends RelativeLayout implements ViewPager.OnPa
 
     }
 
+    /**
+     * 点击监听回调
+     */
     public interface CarouselFigureItemClickListener {
         void onClick(View view, int position);
     }
