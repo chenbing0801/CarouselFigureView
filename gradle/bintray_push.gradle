@@ -94,7 +94,6 @@ bintray {
 
 // Replace all labels with yours
 // 将labels改为你自己开原库相关的标签（便于别人搜索到你的开原库）
-        labels = ['mvc', 'ThePacific']
         websiteUrl = WEB_SITE_URL
         issueTrackerUrl = ISSUE_TRACKER_URL
         vcsUrl = VCS_URL
