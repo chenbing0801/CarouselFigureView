@@ -1,7 +1,7 @@
 
 #一、简介
 
-    **CarouselFigureView是一个支持自动切换、无限循环的轮播图控件。其主要作用就是实现项目当中的轮播图。
+**CarouselFigureView是一个支持自动切换、无限循环的轮播图控件。其主要作用就是实现项目当中的轮播图。
     CarouselFigureView有很强的适配性，可满足基本上所有的轮播图需求。
     你可以在代码中随意禁用自动切换、无限循环功能，也可以隐藏指示点。**
 
@@ -14,11 +14,15 @@
 
 
 
+#三、使用
+androidStudio可直接引用，支持maven()和jcenter()
 
-
-#三、详解
+    compile 'com.github.z593492734:carouselfigureview:1.0.0'
+#四、详解－使用必读
 
 ###1、属性
+**以下全为自定义属性:**
+
     isAutoPlay：              是否支持自动切换，boolean值
     
     isInfiniteLoop：          是否支持无限循环，boolean值  
@@ -35,6 +39,8 @@
     pointBackground：         指示点的背景，内容为资源文件，这里如果需要自定义背景，需要提供selector文件，
                               并在其中给予state_selected＝true 以及state_selected＝false两种状态的背景，                 
                               稍后提供代码
+    imgPlaceholderResource:   设置图片加载过程中占位图片                  
+
                               
 ##2、方法：  
 
@@ -88,11 +94,25 @@
           url.add("http://o.ypgimg.com/content/2016/5/16/88d50d38-09fb-4d3e-bd0c-fc52e2a26c74.jpg");
           url.add("http://o.ypgimg.com/content/2016/5/16/e5a7b0e3-1a21-4e66-adc8-17a1b7c1a92f.jpg");
           url.add("http://o.ypgimg.com/content/2016/5/16/8bae5357-d542-4e52-ad5f-ad7d021fc163.jpg");
-  
+        //可使用setURL()或者setResourceList()，两者必选其一
           carouselFigureView.setURL(url);
+          //该方法为启动方法，必须调用
           carouselFigureView.startLoad();
+          //设置自定义style，我提供了goole官方的两种动画，可以直接使用
+          //new DepthPageTransformer() 
+          //new ZoomOutPageTransformer()
           carouselFigureView.setViewPagerSwitchStyle(new DepthPageTransformer());
+          //设置切换动画的持续时间
+          //::::::注意::::::
+          //该时间一定要小于轮播图切换时间
           carouselFigureView.setViewPagerSwitchSpeed(500);
+          //点击事件
+ carouselFigureView.setCarouselFigureItemClickListener(new CarouselFigureView.CarouselFigureItemClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Toast.makeText(MainActivity.this,"position:"+position,Toast.LENGTH_SHORT).show();
+            }
+        });
       }
       
 ```      
@@ -138,5 +158,6 @@
 ```
 
 >希望这个demo可以在大家实现轮播图的时候有帮助
-
->有任何问题欢迎大家给我留言：**mengyuanzz@126.com**
+>第一个版本,我做了很多的测试,但我相信还是存在隐患
+>并且功能也不能满足所有人
+>有任何问题或建议欢迎大家给我留言：**mengyuanzz@126.com**
